@@ -1,0 +1,38 @@
+{
+    "name": "evispa/testing", 
+    "license": "MIT", 
+    "authors": [
+        {
+            "name": "UAB Evispa", 
+            "email": "info@evispa.lt"
+        }, 
+        {
+            "name": "Tadas Gliaubicas", 
+            "email": "tadas@evispa.lt"
+        }, 
+        {
+            "name": "Darius Krištapavičius", 
+            "email": "darius@evispa.lt"
+        }
+, 
+        {
+            "name": "Egidijus Lukauskas", 
+            "email": "egidijus@evispa.lt"
+        }
+    ], 
+    "homepage": "http://evispa.lt", 
+    "require": {
+        "php": ">=5.3.3",
+
+        "symfony/doctrine-bridge": "~2.3",
+	"doctrine/orm": "~2.2,>=2.2.3"
+    }, 
+    "target-dir": "Evispa/Component/Testing", 
+    "type": "component", 
+    "autoload": {
+        "psr-0": {
+            "Evispa\\Component\\Testing": ""
+        }
+    }, 
+    "description": "Testing component."
+}
