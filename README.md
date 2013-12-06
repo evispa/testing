@@ -1,4 +1,4 @@
-testing
+Testing
 =======
 
 Testing component.
