@@ -123,11 +123,27 @@ class MockObjectManager implements ObjectManager
     public function clear($objectName = null)
     {
         foreach ($this->repositories as $repository) {
-            $repository->objects = array();
+            if (($repository->getClassName() === $objectName) || (null === $objectName)) {
+                $repository->objects = array();
+            }
         }
 
-        $this->persisted = array();
-        $this->removed = array();
+        if (null === $objectName) {
+            $this->persisted = array();
+            $this->removed = array();
+        } else {
+            foreach ($this->persisted as $key => $persist) {
+                if (get_class($persist) === $objectName) {
+                    unset($this->persisted[$key]);
+                }
+            }
+
+            foreach ($this->removed as $key => $remove) {
+                if (get_class($remove) === $objectName) {
+                    unset($this->removed[$key]);
+                }
+            }
+        }
     }
 
     /**
@@ -191,9 +207,9 @@ class MockObjectManager implements ObjectManager
      *
      * @param string $className
      *
-     * @throws \LogicException
-     *
      * @return \Doctrine\Common\Persistence\ObjectRepository
+     *
+     * @throws \LogicException
      */
     public function getRepository($className)
     {
