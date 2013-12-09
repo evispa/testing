@@ -81,6 +81,21 @@ abstract class AbstractMockRepository implements ObjectRepository
     }
 
     /**
+     * @param $objCriteria
+     * @param $findCriteria
+     *
+     * @return bool
+     */
+    private function isSingleCriteriaMatch($objCriteria, $findCriteria)
+    {
+        if (false === is_array($objCriteria) && true === is_array($findCriteria)) {
+            return in_array($objCriteria, $findCriteria, true) ? true : false;
+        }
+
+        return $objCriteria === $findCriteria ? true : false;
+    }
+
+    /**
      * Finds objects by a set of criteria.
      *
      * Optionally sorting and limiting details can be passed. An implementation may throw
@@ -102,7 +117,11 @@ abstract class AbstractMockRepository implements ObjectRepository
         foreach ($this->objectCriteriaMap as $hash => $objCriteria) {
             $ok = true;
             foreach ($criteria as $cKey => $cValue) {
-                if (false === isset($objCriteria[$cKey]) || $objCriteria[$cKey] !== $cValue) {
+
+                if ((false === isset($objCriteria[$cKey]))
+                    ||
+                    (false === $this->isSingleCriteriaMatch($objCriteria[$cKey], $cValue))
+                ) {
                     $ok = false;
                     break;
                 }

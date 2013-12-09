@@ -51,5 +51,22 @@ class AbstractRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, count($result));
     }
+
+    public function testFindByIdArray()
+    {
+        $repo = new MockAcmeRepository();
+
+        $acmeEntity1 = new MockAcmeEntity('code-1');
+        $acmeEntity2 = new MockAcmeEntity('code-2');
+        $acmeEntity3 = new MockAcmeEntity('code-3');
+
+        $repo->addObject($acmeEntity1);
+        $repo->addObject($acmeEntity2);
+        $repo->addObject($acmeEntity3);
+
+        $result = $repo->findBy(array('id' => array('code-1', 'code-2')));
+
+        $this->assertEquals(2, count($result));
+    }
 }
  
