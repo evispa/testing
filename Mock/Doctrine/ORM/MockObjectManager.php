@@ -77,7 +77,7 @@ class MockObjectManager implements ObjectManager
      */
     public function persist($object)
     {
-        if (false === in_array($object, $this->persisted)) {
+        if (false === in_array($object, $this->persisted, true)) {
             $this->persisted[] = $object;
         }
     }
@@ -93,7 +93,7 @@ class MockObjectManager implements ObjectManager
      */
     public function remove($object)
     {
-        if (false === in_array($object, $this->removed)) {
+        if (false === in_array($object, $this->removed, true)) {
             $this->removed[] = $object;
         }
     }
@@ -123,8 +123,25 @@ class MockObjectManager implements ObjectManager
     public function clear($objectName = null)
     {
         foreach ($this->repositories as $repository) {
-            if ($repository->getClassName() === $objectName) {
+            if (($repository->getClassName() === $objectName) || (null === $objectName)) {
                 $repository->objects = array();
+            }
+        }
+
+        if (null === $objectName) {
+            $this->persisted = array();
+            $this->removed = array();
+        } else {
+            foreach ($this->persisted as $key => $persist) {
+                if (get_class($persist) === $objectName) {
+                    unset($this->persisted[$key]);
+                }
+            }
+
+            foreach ($this->removed as $key => $remove) {
+                if (get_class($remove) === $objectName) {
+                    unset($this->removed[$key]);
+                }
             }
         }
     }
@@ -191,10 +208,16 @@ class MockObjectManager implements ObjectManager
      * @param string $className
      *
      * @return \Doctrine\Common\Persistence\ObjectRepository
+     *
+     * @throws \LogicException
      */
     public function getRepository($className)
     {
-        return $this->repositories[$className];
+        if (true === isset($this->repositories[$className])) {
+            return $this->repositories[$className];
+        }
+
+        throw new \LogicException('Not found repository ' . $className);
     }
 
     /**
@@ -245,7 +268,6 @@ class MockObjectManager implements ObjectManager
      */
     public function contains($object)
     {
-        // TODO: Implement contains() method.
+        return in_array($object, $this->persisted, true);
     }
 }
- 

@@ -43,9 +43,9 @@ abstract class AbstractMockRepository implements ObjectRepository
      */
     public function addObject($object)
     {
-        if (false === in_array($object, $this->objects)) {
+        if (false === in_array($object, $this->objects, true)) {
             $hash = spl_object_hash($object);
-            $this->objects[spl_object_hash($object)] = $object;
+            $this->objects[$hash] = $object;
             $this->objectCriteriaMap[$hash] = $this->getObjectCriteria($object);
         }
     }
