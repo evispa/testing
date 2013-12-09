@@ -122,7 +122,11 @@ class MockObjectManager implements ObjectManager
      */
     public function clear($objectName = null)
     {
-        // TODO: Implement clear() method.
+        foreach ($this->repositories as $repository) {
+            if ($repository->getClassName() === $objectName) {
+                $repository->objects = array();
+            }
+        }
     }
 
     /**
